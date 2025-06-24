@@ -60,6 +60,9 @@ import net.minecraft.world.World;
 import net.minecraft.server.OperatorList;
 import net.minecraft.server.OperatorEntry;
 import org.wsm.autolan.agent.AutoLanAgent;
+import com.github.alexdlaird.ngrok.installer.NgrokVersion; // Для указания версии Ngrok
+import com.github.alexdlaird.ngrok.conf.JavaNgrokConfig; // Для конфигурации Ngrok
+import com.github.alexdlaird.ngrok.exception.NgrokException; // Для обработки ошибок Ngrok
 
 public class AutoLan implements ModInitializer {
     public static final String MODID = "autolan";
@@ -68,6 +71,7 @@ public class AutoLan implements ModInitializer {
     public static ConfigHolder<AutoLanConfig> CONFIG;
     public static AutoLanAgent AGENT;
     public static final Map<String, String> activeTunnels = new ConcurrentHashMap<>();
+    @Nullable // NGROK_CLIENT может быть null, если инициализация не удалась
     public static NgrokClient NGROK_CLIENT;
     
     // Флаги для отслеживания пользовательских настроек LAN
@@ -369,8 +373,9 @@ public class AutoLan implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("[AutoLan] Инициализация мода AutoLan");
-        Thread ngrokInstallThread = new Thread(() -> new NgrokClient.Builder().build());
-        ngrokInstallThread.start();
+        // Удаляем старую инициализацию NgrokClient отсюда, она будет в startNgrok()
+        // Thread ngrokInstallThread = new Thread(() -> new NgrokClient.Builder().build());
+        // ngrokInstallThread.start();
         AutoConfig.register(AutoLanConfig.class, Toml4jConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(AutoLanConfig.class);
         
