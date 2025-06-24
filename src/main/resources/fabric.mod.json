@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "autolan",
+  "version": "${version}",
+
+  "name": "AutoLan",
+  "description": "Automatically Opens To Lan Upon Loading A Minecraft World.",
+  "authors": ["WhiteSmileingMan"],
+  "contact": {
+  },
+
+  "license": "MIT",
+  "icon": "assets/autolan/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "main": ["org.wsm.autolan.AutoLan"],
+    "modmenu": [
+      "org.wsm.autolan.integration.AutoLanModMenuApiImpl"
+    ]
+  },
+  "mixins": ["autolan.mixins.json"],
+
+  "depends": {
+    "fabricloader": ">=0.15.10",
+    "minecraft": "1.21.5",
+    "java": ">=21",
+    "fabric-resource-loader-v0": "*",
+    "fabric-registry-sync-v0": "*",
+    "fabric-command-api-v2": "*",
+    "cloth-config": ">=14"
+  }
+}

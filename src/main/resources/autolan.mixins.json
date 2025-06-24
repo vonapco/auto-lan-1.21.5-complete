@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.wsm.autolan.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "PlayerManagerAccessor",
+    "PlayerManagerMixin",
+    "MinecraftServerMixin",
+    "LevelPropertiesMixin",
+    "ServerConfigListAccessor",
+    "GenericCommandMixin",
+    "PublishCommandMixin",
+    "BanCommandMixin",
+    "BanIpCommandMixin",
+    "WhitelistCommandMixin",
+    "IntegratedServerAccessor",
+    "ButtonWidgetAccessor",
+    "GridWidgetAccessor",
+    "GameMenuScreenMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "PlayerListEntryAccessor",
+    "PlayerListS2CPacketAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

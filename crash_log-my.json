@@ -1,0 +1,46 @@
+[{
+	"resource": "/d:/Distr/auto-lan-1.21.5/auto-lan-1.21.5/src/main/java/org/wsm/autolan/gui/AutoLanOpenToLanScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#5",
+	"code": "536871547",
+	"severity": 4,
+	"message": "Unnecessary @SuppressWarnings(\"unchecked\")",
+	"source": "Java",
+	"startLineNumber": 46,
+	"startColumn": 35,
+	"endLineNumber": 46,
+	"endColumn": 46,
+	"tags": [
+		1
+	]
+},{
+	"resource": "/d:/Distr/auto-lan-1.21.5/auto-lan-1.21.5/src/main/java/org/wsm/autolan/gui/AutoLanOpenToLanScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#5",
+	"code": "536871547",
+	"severity": 4,
+	"message": "Unnecessary @SuppressWarnings(\"unchecked\")",
+	"source": "Java",
+	"startLineNumber": 71,
+	"startColumn": 39,
+	"endLineNumber": 71,
+	"endColumn": 50,
+	"tags": [
+		1
+	]
+}]
+
+[{
+	"resource": "/D:/Distr/auto-lan-1.21.5/auto-lan-1.21.5/src/main/java/org/wsm/autolan/mixin/OpenToLanScreenMixin.java",
+	"owner": "_generated_diagnostic_collection_name_#5",
+	"code": "268435844",
+	"severity": 4,
+	"message": "The import net.minecraft.client.MinecraftClient is never used",
+	"source": "Java",
+	"startLineNumber": 39,
+	"startColumn": 8,
+	"endLineNumber": 39,
+	"endColumn": 44,
+	"tags": [
+		1
+	],
+	"modelVersionId": 14
+}]
