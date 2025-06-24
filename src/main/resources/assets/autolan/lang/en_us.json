@@ -41,5 +41,6 @@
   "text.autoconfig.autolan.title": "Custom LAN Options",
   "autolan.commands.enabled": "Commands enabled for all players (permission level 2)",
   "autolan.commands.error": "Failed to set player permissions",
-  "autolan.error.already_started": "LAN is already started. To change settings, restart the world."
+  "autolan.error.already_started": "LAN is already started. To change settings, restart the world.",
+  "autolan.ngrok.error.not_initialized": "ngrok client not initialized. Key might be invalid or missing."
 }

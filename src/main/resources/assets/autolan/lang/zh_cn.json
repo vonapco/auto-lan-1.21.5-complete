@@ -40,5 +40,6 @@
   "text.autoconfig.autolan.title": "Custom LAN Options",
   "autolan.commands.enabled": "所有玩家启用命令 (权限级别 2)",
   "autolan.commands.error": "无法设置玩家权限",
-  "autolan.error.already_started": "LAN 已经启动。要更改设置，请重新启动世界。"
+  "autolan.error.already_started": "局域网已启动。若要更改设置，请重启世界。",
+  "autolan.ngrok.error.not_initialized": "ngrok client not initialized. Key might be invalid or missing."
 }

@@ -22,28 +22,25 @@ public enum TunnelType implements StringIdentifiable {
     NGROK("ngrok") {
         @Override
         public @Nullable String start(MinecraftServer server) throws TunnelException {
-            String authtoken = AutoLan.CONFIG.getConfig().ngrokAuthtoken.strip();
-            if (authtoken.isEmpty()) {
+            // Теперь NgrokClient должен быть инициализирован заранее через AutoLan.startNgrok(key)
+            if (AutoLan.NGROK_CLIENT == null) {
+                AutoLan.LOGGER.error("[AutoLan] [NGROK_TUNNEL] NgrokClient is not initialized. Cannot start ngrok tunnel. Ensure AutoLan.startNgrok() was called successfully.");
                 throw new TunnelException(ScreenTexts.composeGenericOptionText(NGROK_FAILED,
-                        Text.translatable(NGROK_FAILED_NO_AUTHTOKEN,
-                                Utils.createLink(URI.create(NGROK_AUTHTOKEN_URL)))));
+                        Text.translatable("autolan.ngrok.error.not_initialized"))); // Новое сообщение об ошибке
             }
 
             try {
-                AutoLan.NGROK_CLIENT = new NgrokClient.Builder()
-                        .withJavaNgrokConfig(new JavaNgrokConfig.Builder()
-                                .withAuthToken(authtoken)
-                                .build())
-                        .build();
-
+                // NgrokClient уже должен быть настроен с authtoken
+                // Просто создаем туннель
                 Tunnel tunnel = AutoLan.NGROK_CLIENT.connect(new CreateTunnel.Builder()
                         .withProto(Proto.TCP)
                         .withAddr(server.getServerPort())
                         .build());
 
+                AutoLan.LOGGER.info("[AutoLan] [NGROK_TUNNEL] Ngrok tunnel created successfully: {}", tunnel.getPublicUrl());
                 return tunnel.getPublicUrl();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e) { // NgrokException или другие
+                AutoLan.LOGGER.error("[AutoLan] [NGROK_TUNNEL] Failed to create ngrok tunnel", e);
                 throw new TunnelException(
                         ScreenTexts.composeGenericOptionText(NGROK_FAILED, Text.of(e.getMessage())), e);
             }
@@ -51,14 +48,31 @@ public enum TunnelType implements StringIdentifiable {
 
         @Override
         public void stop(MinecraftServer server) throws TunnelException {
-            try {
-                if (AutoLan.NGROK_CLIENT != null) {
-                    AutoLan.NGROK_CLIENT.kill();
+            // Логика остановки остается прежней, так как NGROK_CLIENT.kill() корректно останавливает процесс.
+            // Однако, NGROK_CLIENT может быть установлен в null в AutoLan.startNgrok, если ключ невалиден,
+            // или в AutoLan.stopTunnels(). Поэтому, здесь дополнительная проверка не помешает.
+            if (AutoLan.NGROK_CLIENT != null) {
+                try {
+                    AutoLan.LOGGER.info("[AutoLan] [NGROK_TUNNEL] Attempting to stop ngrok client and tunnels.");
+                    // Закрываем все туннели перед остановкой клиента, если это возможно
+                    // List<Tunnel> tunnels = AutoLan.NGROK_CLIENT.getTunnels();
+                    // for (Tunnel t : tunnels) {
+                    //    try {
+                    //        AutoLan.NGROK_CLIENT.disconnect(t.getPublicUrl());
+                    //    } catch (NgrokException ne) {
+                    //        AutoLan.LOGGER.warn("[AutoLan] [NGROK_TUNNEL] Error disconnecting tunnel {}: {}", t.getPublicUrl(), ne.getMessage());
+                    //    }
+                    // }
+                    AutoLan.NGROK_CLIENT.kill(); // Этот метод останавливает процесс ngrok
+                    AutoLan.LOGGER.info("[AutoLan] [NGROK_TUNNEL] Ngrok client killed.");
+                    // AutoLan.NGROK_CLIENT = null; // Не устанавливаем в null здесь, это может сделать AutoLan.stopTunnels
+                } catch (Exception e) { // NgrokException или другие
+                    AutoLan.LOGGER.error("[AutoLan] [NGROK_TUNNEL] Failed to stop ngrok client", e);
+                    throw new TunnelException(
+                            ScreenTexts.composeGenericOptionText(NGROK_STOP_FAILED, Text.of(e.getMessage())), e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new TunnelException(
-                        ScreenTexts.composeGenericOptionText(NGROK_STOP_FAILED, Text.of(e.getMessage())), e);
+            } else {
+                 AutoLan.LOGGER.info("[AutoLan] [NGROK_TUNNEL] NgrokClient is already null, no stop action needed.");
             }
         }
     };
@@ -88,7 +102,8 @@ public enum TunnelType implements StringIdentifiable {
 
     private static final Text NGROK_FAILED = Text.translatable("commands.publish.failed.tunnel.ngrok");
     private static final Text NGROK_STOP_FAILED = Text.translatable("commands.publish.failed.tunnel.ngrok.stop");
-    private static final String NGROK_FAILED_NO_AUTHTOKEN = "commands.publish.failed.tunnel.ngrok.noAuthtoken";
+    // NGROK_FAILED_NO_AUTHTOKEN больше не нужен здесь, так как проверка токена перенесена
+    // private static final String NGROK_FAILED_NO_AUTHTOKEN = "commands.publish.failed.tunnel.ngrok.noAuthtoken";
 
     private final String name;
 
